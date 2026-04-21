@@ -1,6 +1,6 @@
 #include "Tree.h"
 
-Tree::Tree() : m_root(nullptr){}
+Tree::Tree() : m_root(nullptr), m_sum(0){}
 
 void Tree::readFromFile(const char* filename){
     std::vector<int> keys;
@@ -28,6 +28,7 @@ void Tree::readFromFile(const char* filename){
 
     //add to tree
     for(auto key : keys){
+        ++m_length;
         if(m_root == nullptr){
             m_root = new TreeNode(key);
         }
@@ -50,4 +51,41 @@ void Tree::changeAVL_TREE_BOOL(bool isItTrue){
 
 bool Tree::getAVL_TREE_CHECK(){
     return AVL_TREE_CHECK;
+}
+
+
+//Maximum
+int Tree::maxValue(TreeNode* treeNode) {
+    if (treeNode->getRightNode() == nullptr)
+        return treeNode->getNodeValue();
+    return maxValue(treeNode->getRightNode());
+}
+
+//Minimum
+int Tree::minValue(TreeNode* treeNode) {
+    if (treeNode->getLeftNode() == nullptr)
+        return treeNode->getNodeValue();
+    return minValue(treeNode->getLeftNode());
+}
+
+//Average
+void Tree::avgValue(TreeNode* treeNode) {
+    if (treeNode == nullptr) {
+        return;
+    }
+
+    avgValue(treeNode->getLeftNode());
+    avgValue(treeNode->getRightNode());
+    m_sum += treeNode->getNodeValue();
+}
+
+
+
+void Tree::printStats(){
+    avgValue(m_root);
+    int treeMax = maxValue(m_root);
+    int treeMin = minValue(m_root);
+    std::cout << "\nmin:"<< treeMin << ',';
+    std::cout << "max:" << treeMax << ',';
+    std::cout << "avg:" << m_sum/m_length << '\n';
 }

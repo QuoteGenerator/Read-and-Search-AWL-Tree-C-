@@ -19,8 +19,9 @@ int main(int argc, char* argv[]){
         std::cout << "\nAVL: YES";
     }
 
-}
+    tree.printStats();
 
+}
 
 void printBalanceFactor(TreeNode* treeNode, Tree& tree){
     int leftDepth = 0;
@@ -50,8 +51,6 @@ void printBalanceFactor(TreeNode* treeNode, Tree& tree){
     printBalanceFactor(treeNode->getRightNode(), tree);
 
 }
-
-
 int getDepth(TreeNode* treeNode){
     if (treeNode == nullptr) {
         return 0;
@@ -62,4 +61,5 @@ int getDepth(TreeNode* treeNode){
 
     return 1 + std::max(leftHeight, rightHeight);
 }
+
 
