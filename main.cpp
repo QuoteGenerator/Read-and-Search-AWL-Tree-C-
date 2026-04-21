@@ -132,9 +132,9 @@ void keyWordSearch(TreeNode* treeNode, TreeNode* subtreeNode, bool& exists, std:
         return;
     }
 
-    if(treeNode == nullptr){
+    /*if(treeNode == nullptr){
         quickNodeSave.empty();
-    }
+    }debug*/
 
     keyWordSearch(treeNode->getLeftNode(), subtreeNode, exists, quickNodeSave);
     keyWordSearch(treeNode->getRightNode(), subtreeNode, exists, quickNodeSave);
