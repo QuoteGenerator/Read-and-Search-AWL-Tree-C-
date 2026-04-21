@@ -2,10 +2,14 @@
 
 void printBalanceFactor(TreeNode* treeNode, Tree& tree);
 int getDepth(TreeNode* treeNode);
-void keyWordSearch(TreeNode* treeNode, TreeNode* subtreeNode, bool exists, std::vector<int> quickNodeSave);
-void subTreeSearch(TreeNode* treeNode, TreeNode* subtreeNode, bool exists, std::vector<int> quickNodeSave);
+void keyWordSearch(TreeNode* treeNode, TreeNode* subtreeNode, bool& exists, std::vector<int> quickNodeSave);
+void subTreeSearch(TreeNode* treeNode, TreeNode* subtreeNode, bool& exists, std::vector<int> quickNodeSave);
+TreeNode* findStartNode(TreeNode* treeNode, int value);
+bool matchSubtree(TreeNode* bigNode, TreeNode* smallNode);
+
 
 int main(int argc, char* argv[]){
+    bool exists = false;
     if(argc != 3){
         std::cerr << "Usage: treecheck [file.txt] [file.txt]\n";
         return 1;
@@ -36,10 +40,21 @@ int main(int argc, char* argv[]){
     if(subtree.get_m_root() != nullptr){
         if(subtree.get_m_root()->getLeftNode() == nullptr && subtree.get_m_root()->getRightNode() == nullptr){
             std::cout << "Search for this keyword: " << subtree.get_m_root()->getNodeValue() << std::endl;
-            keyWordSearch(tree.get_m_root(), subtree.get_m_root(), false, {});
+            keyWordSearch(tree.get_m_root(), subtree.get_m_root(), exists, {});
+            if(!exists){
+                std::cout << subtree.get_m_root()->getNodeValue() << " NOT FOUND!";
+            }
         }else {
+            exists = false;
             std::cout << "Search for this sub-tree: " << "..." << std::endl << std::endl;
-            subTreeSearch(tree.get_m_root(), subtree.get_m_root(), false, {});
+
+            subTreeSearch(tree.get_m_root(), subtree.get_m_root(), exists, {});
+
+            if(exists){
+                std::cout << "Subtree found";
+            } else {
+                std::cout << "Subtree not found!";
+            }
         }
     }
 }
@@ -84,7 +99,7 @@ int getDepth(TreeNode* treeNode){
 }
 
 
-void keyWordSearch(TreeNode* treeNode, TreeNode* subtreeNode, bool exists, std::vector<int> quickNodeSave){
+void keyWordSearch(TreeNode* treeNode, TreeNode* subtreeNode, bool& exists, std::vector<int> quickNodeSave){
     if(treeNode == nullptr){
         return;
     }
@@ -112,6 +127,65 @@ void keyWordSearch(TreeNode* treeNode, TreeNode* subtreeNode, bool exists, std::
     keyWordSearch(treeNode->getLeftNode(), subtreeNode, exists, quickNodeSave);
     keyWordSearch(treeNode->getRightNode(), subtreeNode, exists, quickNodeSave);
 }
-void subTreeSearch(TreeNode* treeNode, TreeNode* subtreeNode, bool exists, std::vector<int> quickNodeSave){
 
+
+//----------------------------- SUBTREE SEARCH -----------------------------
+TreeNode* findStartNode(TreeNode* treeNode, int value){
+    if(treeNode == nullptr){
+        return nullptr;
+    }
+
+    if(treeNode->getNodeValue() == value){
+        return treeNode;
+    }
+
+    TreeNode* leftResult = findStartNode(treeNode->getLeftNode(), value);
+    if(leftResult != nullptr){
+        return leftResult;
+    }
+
+    return findStartNode(treeNode->getRightNode(), value);
+}
+
+bool matchSubtree(TreeNode* bigNode, TreeNode* smallNode){
+    if(smallNode == nullptr){
+        return true;
+    }
+
+    if(bigNode == nullptr){
+        return false;
+    }
+
+    if(bigNode->getNodeValue() != smallNode->getNodeValue()){
+        return false;
+    }
+
+    bool leftOK = true;
+    bool rightOK = true;
+
+    if(smallNode->getLeftNode() != nullptr){
+        leftOK = matchSubtree(bigNode->getLeftNode(), smallNode->getLeftNode());
+    }
+
+    if(smallNode->getRightNode() != nullptr){
+        rightOK = matchSubtree(bigNode->getRightNode(), smallNode->getRightNode());
+    }
+
+    return leftOK && rightOK;
+}
+
+void subTreeSearch(TreeNode* treeNode, TreeNode* subtreeNode, bool& exists, std::vector<int> quickNodeSave){
+    if(treeNode == nullptr || subtreeNode == nullptr){
+        exists = false;
+        return;
+    }
+
+    TreeNode* startNode = findStartNode(treeNode, subtreeNode->getNodeValue());
+
+    if(startNode == nullptr){
+        exists = false;
+        return;
+    }
+
+    exists = matchSubtree(startNode, subtreeNode);
 }
