@@ -1,6 +1,6 @@
 #include "Tree.h"
 
-Tree::Tree() : m_root(nullptr), m_sum(0){}
+Tree::Tree() : m_root(nullptr), m_sum(0), m_length(0){}
 
 void Tree::readFromFile(const char* filename){
     std::vector<int> keys;

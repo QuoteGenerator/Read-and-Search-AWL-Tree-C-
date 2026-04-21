@@ -2,6 +2,8 @@
 
 void printBalanceFactor(TreeNode* treeNode, Tree& tree);
 int getDepth(TreeNode* treeNode);
+void keyWordSearch(TreeNode* treeNode, TreeNode* subtreeNode, bool exists, std::vector<int> quickNodeSave);
+void subTreeSearch(TreeNode* treeNode, TreeNode* subtreeNode, bool exists, std::vector<int> quickNodeSave);
 
 int main(int argc, char* argv[]){
     if(argc != 3){
@@ -9,18 +11,37 @@ int main(int argc, char* argv[]){
         return 1;
     }
     Tree tree;
+
+    std::cout << "Tree Values: \n";
     tree.readFromFile(argv[1]);
+
 
     printBalanceFactor(tree.get_m_root(), tree);
 
     if(tree.getAVL_TREE_CHECK()){
-        std::cout << "\nAVL: NO";
-    } else {
         std::cout << "\nAVL: YES";
+    } else {
+        std::cout << "\nAVL: NO";
     }
 
     tree.printStats();
 
+    Tree subtree;
+    subtree.readFromFile(argv[2]);
+
+    std::cout << "\033[1A"; //ANSI SEQUENCE CODE -> Mit Cursor rauf
+    std::cout << "\033[2K"; //Zeile Löschen | GRUND: Weil noch die z.B. 100 geprinted wird, bei einlesen des Schlüsselworts 100
+
+    std::cout << "\n\n------ Search! ------\n";
+    if(subtree.get_m_root() != nullptr){
+        if(subtree.get_m_root()->getLeftNode() == nullptr && subtree.get_m_root()->getRightNode() == nullptr){
+            std::cout << "Search for this keyword: " << subtree.get_m_root()->getNodeValue() << std::endl;
+            keyWordSearch(tree.get_m_root(), subtree.get_m_root(), false, {});
+        }else {
+            std::cout << "Search for this sub-tree: " << "..." << std::endl << std::endl;
+            subTreeSearch(tree.get_m_root(), subtree.get_m_root(), false, {});
+        }
+    }
 }
 
 void printBalanceFactor(TreeNode* treeNode, Tree& tree){
@@ -40,9 +61,9 @@ void printBalanceFactor(TreeNode* treeNode, Tree& tree){
     balanceFactor = rightDepth - leftDepth;
 
     std::string violationText = "";
-    if(balanceFactor >= 2){
+    if(balanceFactor >= 2 || balanceFactor <= -2){
         violationText = " (AVL violation!)";
-        tree.changeAVL_TREE_BOOL(true);
+        tree.changeAVL_TREE_BOOL(false);
     }
 
     std::cout << "bal(" << treeNode->getNodeValue() << ")" << " = " << balanceFactor << violationText;
@@ -63,3 +84,34 @@ int getDepth(TreeNode* treeNode){
 }
 
 
+void keyWordSearch(TreeNode* treeNode, TreeNode* subtreeNode, bool exists, std::vector<int> quickNodeSave){
+    if(treeNode == nullptr){
+        return;
+    }
+    if(exists == true){
+        return;
+    }
+
+    quickNodeSave.push_back(treeNode->getNodeValue());
+
+    if(treeNode->getNodeValue() == subtreeNode->getNodeValue()){
+        exists = true;
+    }
+
+    if(exists){
+        for(auto nodeValue = quickNodeSave.begin(); nodeValue != quickNodeSave.end(); nodeValue++){
+            std::cout << "-> " << *nodeValue << " ";
+        }
+        return;
+    }
+
+    if(treeNode == nullptr){
+        quickNodeSave.empty();
+    }
+
+    keyWordSearch(treeNode->getLeftNode(), subtreeNode, exists, quickNodeSave);
+    keyWordSearch(treeNode->getRightNode(), subtreeNode, exists, quickNodeSave);
+}
+void subTreeSearch(TreeNode* treeNode, TreeNode* subtreeNode, bool exists, std::vector<int> quickNodeSave){
+
+}
