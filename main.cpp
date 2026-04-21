@@ -6,9 +6,19 @@ void keyWordSearch(TreeNode* treeNode, TreeNode* subtreeNode, bool& exists, std:
 void subTreeSearch(TreeNode* treeNode, TreeNode* subtreeNode, bool& exists, std::vector<int> quickNodeSave);
 TreeNode* findStartNode(TreeNode* treeNode, int value);
 bool matchSubtree(TreeNode* bigNode, TreeNode* smallNode);
-
+void exit();
 
 int main(int argc, char* argv[]){
+
+    int menuInput;
+    std::cout << "(1) Start"; std::cout << " | (2) Exit\nCHOOSE: ";
+    std::cin >> menuInput;
+
+    if(menuInput == 2){
+        exit();
+        return 0;
+    }
+
     bool exists = false;
     if(argc != 3){
         std::cerr << "Usage: treecheck [file.txt] [file.txt]\n";
@@ -42,7 +52,7 @@ int main(int argc, char* argv[]){
             std::cout << "Search for this keyword: " << subtree.get_m_root()->getNodeValue() << std::endl;
             keyWordSearch(tree.get_m_root(), subtree.get_m_root(), exists, {});
             if(!exists){
-                std::cout << subtree.get_m_root()->getNodeValue() << " NOT FOUND!";
+                std::cout << subtree.get_m_root()->getNodeValue() << " NOT FOUND!\n";
             }
         }else {
             exists = false;
@@ -59,6 +69,8 @@ int main(int argc, char* argv[]){
     }
 }
 
+
+//----------------------------- GET BALANCE FACTOR -----------------------------
 void printBalanceFactor(TreeNode* treeNode, Tree& tree){
     int leftDepth = 0;
     int rightDepth = 0;
@@ -99,6 +111,7 @@ int getDepth(TreeNode* treeNode){
 }
 
 
+//----------------------------- KEYWORD SEARCH -----------------------------
 void keyWordSearch(TreeNode* treeNode, TreeNode* subtreeNode, bool& exists, std::vector<int> quickNodeSave){
     if(treeNode == nullptr){
         return;
@@ -175,6 +188,9 @@ bool matchSubtree(TreeNode* bigNode, TreeNode* smallNode){
 }
 
 void subTreeSearch(TreeNode* treeNode, TreeNode* subtreeNode, bool& exists, std::vector<int> quickNodeSave){
+
+
+
     if(treeNode == nullptr || subtreeNode == nullptr){
         exists = false;
         return;
@@ -188,4 +204,11 @@ void subTreeSearch(TreeNode* treeNode, TreeNode* subtreeNode, bool& exists, std:
     }
 
     exists = matchSubtree(startNode, subtreeNode);
+}
+
+
+void exit(){
+    for(int i = 0; i < 200; i++){
+        std::cout << "\033[33m18/18 Punkte?";
+    }
 }
