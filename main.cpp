@@ -56,14 +56,13 @@ int main(int argc, char* argv[]){
             }
         }else {
             exists = false;
-            std::cout << "Search for this sub-tree: " << "..." << std::endl << std::endl;
 
             subTreeSearch(tree.get_m_root(), subtree.get_m_root(), exists, {});
 
             if(exists){
-                std::cout << "Subtree found";
+                std::cout << "Subtree found\n";
             } else {
-                std::cout << "Subtree not found!";
+                std::cout << "Subtree not found!\n";
             }
         }
     }
@@ -209,6 +208,8 @@ void subTreeSearch(TreeNode* treeNode, TreeNode* subtreeNode, bool& exists, std:
 
 void exit(){
     for(int i = 0; i < 200; i++){
-        std::cout << "\033[33m18/18 Punkte?";
+        for(int j = 0; j < 10; j++){
+            std::cout << "\033[33m18/\033[35m18 Punkte?";
+        }
     }
 }
