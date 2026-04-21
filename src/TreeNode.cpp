@@ -33,3 +33,14 @@ TreeNode* TreeNode::addNode(TreeNode* root, int key){
         }
     }
 }
+
+int TreeNode::getNodeValue(){
+    return m_key;
+}
+
+TreeNode* TreeNode::getRightNode(){
+    return m_right;
+}
+TreeNode* TreeNode::getLeftNode(){
+    return m_left;
+}

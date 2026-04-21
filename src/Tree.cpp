@@ -34,7 +34,20 @@ void Tree::readFromFile(const char* filename){
         else{
             m_root = m_root->addNode(m_root, key);
         }
+
         std::cout << key << '\n';
     }
 }
 
+TreeNode* Tree::get_m_root(){
+    return m_root;
+}
+
+
+void Tree::changeAVL_TREE_BOOL(bool isItTrue){
+    AVL_TREE_CHECK = isItTrue;
+}
+
+bool Tree::getAVL_TREE_CHECK(){
+    return AVL_TREE_CHECK;
+}

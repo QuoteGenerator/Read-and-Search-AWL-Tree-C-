@@ -7,6 +7,10 @@ class TreeNode{
         TreeNode(int key);
         TreeNode* addNode(TreeNode* root, int key);
 
+        int getNodeValue();
+        TreeNode* getRightNode();
+        TreeNode* getLeftNode();
+
     private:
         int m_key;
         TreeNode* m_right;
